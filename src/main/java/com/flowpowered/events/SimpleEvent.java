@@ -29,31 +29,31 @@ import com.flowpowered.events.Event.VoidParameter;
  * Represents a callable event.
  */
 public abstract class SimpleEvent extends Event<VoidParameter> {
-    public SimpleEvent() {
-        parameter = new VoidParameter();
-    }
+	public SimpleEvent() {
+		parameter = new VoidParameter();
+	}
 
-    /**
-     * Set cancelled status. Events which wish to be cancellable should implement Cancellable and implement setCancelled as: <p>
-     * <pre>
-     * public void setCancelled(boolean cancelled) {
-     *     super.setCancelled(cancelled);
-     * }
-     * </pre>
-     *
-     * @param cancelled True to cancel event
-     */
-    protected void setCancelled(boolean cancelled) {
-         parameter.setCancelled(cancelled);
-    }
+	/**
+	 * Set cancelled status. Events which wish to be cancellable should implement Cancellable and implement setCancelled as: <p>
+	 * <pre>
+	 * public void setCancelled(boolean cancelled) {
+	 * 	super.setCancelled(cancelled);
+	 * }
+	 * </pre>
+	 *
+	 * @param cancelled True to cancel event
+	 */
+	protected void setCancelled(boolean cancelled) {
+		 parameter.setCancelled(cancelled);
+	}
 
-    /**
-     * Returning true will prevent calling any even {@link Order}ed slots.
-     *
-     * @return false if the event is propogating; events which do not implement Cancellable should never return true here.
-     * @see Order
-     */
-    public boolean isCancelled() {
-        return parameter.isCancelled();
-    }
+	/**
+	 * Returning true will prevent calling any even {@link Order}ed slots.
+	 *
+	 * @return false if the event is propogating; events which do not implement Cancellable should never return true here.
+	 * @see Order
+	 */
+	public boolean isCancelled() {
+		return parameter.isCancelled();
+	}
 }
