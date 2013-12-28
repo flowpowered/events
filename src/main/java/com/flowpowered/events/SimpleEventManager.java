@@ -37,11 +37,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * A simple implementation of the {@link EventManager} that handles all {@link SimpleEvent}s for the engine.
+ * A simple implementation of the {@link EventManager} that handles all {@link Event}s for the engine.
  */
 public class SimpleEventManager implements EventManager {
     private final Logger logger;
-    private final Map<Class<? extends SimpleEvent>, HandlerList> handlers = new ConcurrentHashMap<>(16, .75f, 4);
+    private final Map<Class<? extends Event>, HandlerList> handlers = new ConcurrentHashMap<>(16, .75f, 4);
 
     public SimpleEventManager() {
         this.logger = LogManager.getLogger(getClass().getSimpleName());
@@ -75,6 +75,9 @@ public class SimpleEventManager implements EventManager {
     @Override
     public <T extends Event> T callEvent(T event) {
         HandlerList handlers = this.handlers.get(event.getClass());
+        if (handlers == null) {
+            return event;
+        }
         ListenerRegistration[] listeners = handlers.getRegisteredListeners();
 
         if (listeners != null) {
@@ -103,7 +106,23 @@ public class SimpleEventManager implements EventManager {
 
     @Override
     public void unRegisterEvents(Listener listener) {
-        unRegisterEvents(listener);
+        List<Method> methods = getAllMethods(listener);
+        for (final Method method : methods) {
+            final EventHandler eh = method.getAnnotation(EventHandler.class);
+            if (eh == null) {
+                continue;
+            }
+            try {
+                Class<? extends Event> eventClass = getValidatedClass(method);
+                HandlerList get = this.handlers.get(eventClass);
+                if (get == null) {
+                    continue;
+                }
+                get.unregister(new ListenerRegistration(new MethodEventExecutor(listener, method), eh.order(), null));
+            } catch (IllegalArgumentException e) {
+                this.logger.error(e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -115,20 +134,32 @@ public class SimpleEventManager implements EventManager {
 
     @Override
     public void registerEvents(Listener listener, Object owner) {
-        registerListeners(listener, owner);
+        List<Method> methods = getAllMethods(listener);
+        for (final Method method : methods) {
+            final EventHandler eh = method.getAnnotation(EventHandler.class);
+            if (eh == null) {
+                continue;
+            }
+            try {
+                Class<? extends Event> eventClass = getValidatedClass(method);
+                newHandlerList(eventClass).register(new ListenerRegistration(new MethodEventExecutor(listener, method), eh.order(), owner));
+            } catch (IllegalArgumentException e) {
+                this.logger.error(e.getMessage());
+            }
+        }
     }
 
     @Override
-    public void registerEvent(Class<? extends SimpleEvent> event, Order priority, EventExecutor executor, Object owner) {
+    public void registerEvent(Class<? extends Event> event, Order priority, EventExecutor executor, Object owner) {
         newHandlerList(event).register(new ListenerRegistration(executor, priority, owner));
     }
 
-    private HandlerList newHandlerList(Class<? extends SimpleEvent> clazz) {
+    private HandlerList newHandlerList(Class<? extends Event> clazz) {
         HandlerList list = this.handlers.get(clazz);
         if (list == null) {
             HandlerList parent = null;
-            if (clazz.getSuperclass() != null && SimpleEvent.class.isAssignableFrom(clazz.getSuperclass()) && !clazz.getSuperclass().equals(SimpleEvent.class)) {
-                parent = newHandlerList(clazz.getSuperclass().asSubclass(SimpleEvent.class));
+            if (clazz.getSuperclass() != null && Event.class.isAssignableFrom(clazz.getSuperclass()) && !clazz.getSuperclass().equals(Event.class)) {
+                parent = newHandlerList(clazz.getSuperclass().asSubclass(Event.class));
             }
             list = new HandlerList(parent);
             this.handlers.put(clazz, list);
@@ -151,53 +182,16 @@ public class SimpleEventManager implements EventManager {
         return methods;
     }
 
-    private Class<? extends SimpleEvent> getValidatedClass(Method method) throws IllegalArgumentException {
+    private Class<? extends Event> getValidatedClass(Method method) throws IllegalArgumentException {
         if (method.getParameterTypes().length < 1) {
             throw new IllegalArgumentException("No method arguments used for event type registered");
         }
 
         final Class<?> checkClass = method.getParameterTypes()[0];
-        if (!SimpleEvent.class.isAssignableFrom(checkClass) || method.getParameterTypes().length != 1) {
+        if (!Event.class.isAssignableFrom(checkClass) || method.getParameterTypes().length != 1) {
             throw new IllegalArgumentException("Wrong method arguments used for event type registered");
         }
-        return checkClass.asSubclass(SimpleEvent.class);
-    }
-
-    public void registerListeners(final Listener listener, Object owner) {
-        List<Method> methods = getAllMethods(listener);
-        for (final Method method : methods) {
-            final EventHandler eh = method.getAnnotation(EventHandler.class);
-            if (eh == null) {
-                continue;
-            }
-            try {
-                Class<? extends SimpleEvent> eventClass = getValidatedClass(method);
-                newHandlerList(eventClass).register(new ListenerRegistration(new MethodEventExecutor(listener, method), eh.order(), owner));
-            } catch (IllegalArgumentException e) {
-                this.logger.error(e.getMessage());
-            }
-        }
-    }
-
-    public void unRegisterListeners(final Listener listener) {
-        List<Method> methods = getAllMethods(listener);
-        for (final Method method : methods) {
-            final EventHandler eh = method.getAnnotation(EventHandler.class);
-            if (eh == null) {
-                continue;
-            }
-            if (method.getParameterTypes().length < 1) {
-                continue;
-            }
-            try {
-                Class<? extends SimpleEvent> eventClass = getValidatedClass(method);
-                HandlerList get = this.handlers.get(eventClass);
-                if (get == null) {
-                    continue;
-                }
-                get.unregister(new ListenerRegistration(new MethodEventExecutor(listener, method), eh.order(), null));
-            } catch (IllegalArgumentException e) {}
-        }
+        return checkClass.asSubclass(Event.class);
     }
 
     private static class MethodEventExecutor implements EventExecutor {

@@ -79,5 +79,5 @@ public interface EventManager {
 	 * @param executor EventExecutor to register
 	 * @param owner Plugin to register
 	 */
-	public void registerEvent(Class<? extends SimpleEvent> event, Order priority, EventExecutor executor, Object owner);
+	public void registerEvent(Class<? extends Event> event, Order priority, EventExecutor executor, Object owner);
 }
