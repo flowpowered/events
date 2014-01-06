@@ -32,9 +32,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple implementation of the {@link EventManager} that handles all {@link Event}s for the engine.
@@ -44,7 +43,7 @@ public class SimpleEventManager implements EventManager {
     private final Map<Class<? extends Event>, HandlerList> handlers = new ConcurrentHashMap<>(16, .75f, 4);
 
     public SimpleEventManager() {
-        this.logger = LogManager.getLogger(getClass().getSimpleName());
+        this.logger = LoggerFactory.getLogger(getClass().getSimpleName());
     }
 
     public SimpleEventManager(Logger logger) {
@@ -87,7 +86,8 @@ public class SimpleEventManager implements EventManager {
                         listener.getExecutor().execute(event);
                     }
                 } catch (Throwable ex) {
-                    this.logger.log(Level.ERROR, "Could not pass event " + event.getEventName() + " to " + listener.getOwner().getClass().getName(), ex);
+                    this.logger.error("Could not pass event " + event.getEventName() + " to " + listener.getOwner().getClass().getName(), ex); // TODO: Use parametrized message instead of string
+                                                                                                                                               // concatation.
                 }
             }
             event.parameter.beenCalled = true;
@@ -174,7 +174,7 @@ public class SimpleEventManager implements EventManager {
             try {
                 methods.addAll(Arrays.asList(listenerClass.getDeclaredMethods()));
             } catch (NoClassDefFoundError e) {
-                this.logger.log(Level.ERROR, "Listener class " + listenerClass + " does not exist.", e);
+                this.logger.error("Listener class " + listenerClass + " does not exist.", e); // TODO: Use parametrized message instead of string concatation.
                 break;
             }
             listenerClass = listenerClass.getSuperclass();
