@@ -1,7 +1,7 @@
 /*
  * This file is part of Flow Events, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2013 Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2013 Spout LLC <https://spout.org/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,13 @@
 package com.flowpowered.events.object;
 
 public class ObjectEvent<T> {
-	private final T associatedObject;
+    private final T associatedObject;
 
-	public ObjectEvent(T associatedObject) {
-		this.associatedObject = associatedObject;
-	}
+    public ObjectEvent(T associatedObject) {
+        this.associatedObject = associatedObject;
+    }
 
-	public T getAssociatedObject() {
-		return associatedObject;
-	}
+    public T getAssociatedObject() {
+        return associatedObject;
+    }
 }

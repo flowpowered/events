@@ -1,7 +1,7 @@
 /*
  * This file is part of Flow Events, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2013 Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2013 Spout LLC <https://spout.org/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,26 +27,26 @@ package com.flowpowered.events;
  * Represents a callable event which has a parameter so that the event can be reused.
  */
 public abstract class Event<T extends EventParameter> {
-	T parameter;
+    T parameter;
 
-	public T getParameter() {
-		return parameter;
-	}
+    public T getParameter() {
+        return parameter;
+    }
 
-	/**
-	 * Get event type name.
-	 *
-	 * @return event name
-	 */
-	protected String getEventName() {
-		return getClass().getSimpleName();
-	}
+    /**
+     * Get event type name.
+     *
+     * @return event name
+     */
+    protected String getEventName() {
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public String toString() {
-		return getEventName() + " (" + this.getClass().getName() + ")";
-	}
+    @Override
+    public String toString() {
+        return getEventName() + " (" + this.getClass().getName() + ")";
+    }
 
-	public static class VoidParameter extends EventParameter {
-	}
+    public static class VoidParameter extends EventParameter {
+    }
 }

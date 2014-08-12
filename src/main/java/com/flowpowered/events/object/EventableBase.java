@@ -1,7 +1,7 @@
 /*
  * This file is part of Flow Events, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2013 Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2013 Spout LLC <https://spout.org/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,27 +29,27 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Basic implementation of {@link Eventable}
  */
 public class EventableBase<T extends ObjectEvent<?>> implements Eventable<T> {
-	private final CopyOnWriteArrayList<EventableListener<T>> registeredListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<EventableListener<T>> registeredListeners = new CopyOnWriteArrayList<>();
 
-	@Override
-	public void registerListener(EventableListener<T> listener) {
-		registeredListeners.add(listener);
-	}
+    @Override
+    public void registerListener(EventableListener<T> listener) {
+        registeredListeners.add(listener);
+    }
 
-	@Override
-	public void unregisterAllListeners() {
-		registeredListeners.clear();
-	}
+    @Override
+    public void unregisterAllListeners() {
+        registeredListeners.clear();
+    }
 
-	@Override
-	public void unregisterListener(EventableListener<T> listener) {
-		registeredListeners.remove(listener);
-	}
+    @Override
+    public void unregisterListener(EventableListener<T> listener) {
+        registeredListeners.remove(listener);
+    }
 
-	@Override
-	public void callEvent(T event) {
-		for (EventableListener<T> listener : registeredListeners) {
-			listener.onEvent(event);
-		}
-	}
+    @Override
+    public void callEvent(T event) {
+        for (EventableListener<T> listener : registeredListeners) {
+            listener.onEvent(event);
+        }
+    }
 }

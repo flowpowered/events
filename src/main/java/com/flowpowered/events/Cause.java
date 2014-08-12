@@ -1,7 +1,7 @@
 /*
  * This file is part of Flow Events, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2013 Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2013 Spout LLC <https://spout.org/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ public abstract class Cause<T> {
     }
 
     /**
-     * Gets the parent cause of this cause. <br/><br/> Note: Can be null if there is no parent
+     * Gets the parent cause of this cause.<br><br> Note: Can be null if there is no parent
      *
      * @return parent cause or null if there is no parent
      */

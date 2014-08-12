@@ -1,7 +1,7 @@
 /*
  * This file is part of Flow Events, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2013 Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2013 Spout LLC <https://spout.org/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +29,29 @@ package com.flowpowered.events.object;
  * @param <T> The type of event allowed
  */
 public interface Eventable<T> {
-	/**
-	 * Add a listener for the type of event this {@link Eventable} covers.
-	 *
-	 * @param listener The listener to register.
-	 */
-	public void registerListener(EventableListener<T> listener);
+    /**
+     * Add a listener for the type of event this {@link Eventable} covers.
+     *
+     * @param listener The listener to register.
+     */
+    public void registerListener(EventableListener<T> listener);
 
-	/**
-	 * Remove all listeners for the event
-	 */
-	public void unregisterAllListeners();
+    /**
+     * Remove all listeners for the event
+     */
+    public void unregisterAllListeners();
 
-	/**
-	 * Unregister a specific listener
-	 *
-	 * @param listener The listener to unregister
-	 */
-	public void unregisterListener(EventableListener<T> listener);
+    /**
+     * Unregister a specific listener
+     *
+     * @param listener The listener to unregister
+     */
+    public void unregisterListener(EventableListener<T> listener);
 
-	/**
-	 * Call the event with all current listeners.
-	 *
-	 * @param event The event instance to call
-	 */
-	public void callEvent(T event);
+    /**
+     * Call the event with all current listeners.
+     *
+     * @param event The event instance to call
+     */
+    public void callEvent(T event);
 }
