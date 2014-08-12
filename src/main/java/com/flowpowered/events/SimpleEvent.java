@@ -50,7 +50,7 @@ public abstract class SimpleEvent extends Event<VoidParameter> {
     /**
      * Returning true will prevent calling any even {@link Order}ed slots.
      *
-     * @return false if the event is propogating; events which do not implement Cancellable should never return true here.
+     * @return false if the event is propagating; events which do not implement Cancellable should never return true here.
      * @see Order
      */
     public boolean isCancelled() {

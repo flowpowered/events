@@ -87,7 +87,7 @@ public class SimpleEventManager implements EventManager {
                     }
                 } catch (Throwable ex) {
                     this.logger.error("Could not pass event " + event.getEventName() + " to " + listener.getOwner().getClass().getName(), ex); // TODO: Use parametrized message instead of string
-                                                                                                                                               // concatation.
+                                                                                                                                               // concatenation.
                 }
             }
             event.parameter.beenCalled = true;
@@ -174,7 +174,7 @@ public class SimpleEventManager implements EventManager {
             try {
                 methods.addAll(Arrays.asList(listenerClass.getDeclaredMethods()));
             } catch (NoClassDefFoundError e) {
-                this.logger.error("Listener class " + listenerClass + " does not exist.", e); // TODO: Use parametrized message instead of string concatation.
+                this.logger.error("Listener class " + listenerClass + " does not exist.", e); // TODO: Use parametrized message instead of string concatenation.
                 break;
             }
             listenerClass = listenerClass.getSuperclass();

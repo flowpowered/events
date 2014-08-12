@@ -39,7 +39,7 @@ public final class HandlerList {
      */
     private ListenerRegistration[] handlers = null;
     /**
-     * Returns the Dynamic handler lists.<br> These are changed using register() and unregister()<br> Changes automatically baked to the handlers array any time they have changed..
+     * Returns the Dynamic handler lists.<br> These are changed using register() and unregister()<br> Changes automatically baked to the handlers array any time they have changed.
      */
     private final EnumMap<Order, List<ListenerRegistration>> handlerSlots;
     private final CopyOnWriteArrayList<HandlerList> children = new CopyOnWriteArrayList<>(); // Not modified that much, it's fine
