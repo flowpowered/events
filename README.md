@@ -67,7 +67,6 @@ If you're using [Gradle](http://www.gradle.org/) to manage project dependencies,
         compile 'com.flowpowered:flow-events:0.1.0-SNAPSHOT'
     }
 
-
 If you'd prefer to manually import the latest .jar file, you can get it [here](https://github.com/flow/flow-events/releases).
 
 ## Documentation
