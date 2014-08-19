@@ -105,7 +105,7 @@ public class SimpleEventManager implements EventManager {
     }
 
     @Override
-    public void unRegisterEvents(Listener listener) {
+    public void unRegisterEventsByListener(Object listener) {
         List<Method> methods = getAllMethods(listener);
         for (final Method method : methods) {
             final EventHandler eh = method.getAnnotation(EventHandler.class);
@@ -126,14 +126,14 @@ public class SimpleEventManager implements EventManager {
     }
 
     @Override
-    public void unRegisterEvents(Object owner) {
+    public void unRegisterEventsByOwner(Object owner) {
         for (HandlerList list : this.handlers.values()) {
             list.unregister(owner);
         }
     }
 
     @Override
-    public void registerEvents(Listener listener, Object owner) {
+    public void registerEvents(Object listener, Object owner) {
         List<Method> methods = getAllMethods(listener);
         for (final Method method : methods) {
             final EventHandler eh = method.getAnnotation(EventHandler.class);
@@ -167,7 +167,7 @@ public class SimpleEventManager implements EventManager {
         return list;
     }
 
-    private List<Method> getAllMethods(Listener listener) {
+    private List<Method> getAllMethods(Object listener) {
         List<Method> methods = new ArrayList<>();
         Class<?> listenerClass = listener.getClass();
         while (listenerClass != null && !listenerClass.equals(Object.class)) {
@@ -195,10 +195,10 @@ public class SimpleEventManager implements EventManager {
     }
 
     private static class MethodEventExecutor implements EventExecutor {
-        private final Listener listenerInstance;
+        private final Object listenerInstance;
         private final Method method;
 
-        public MethodEventExecutor(Listener listener, Method method) {
+        public MethodEventExecutor(Object listener, Method method) {
             this.listenerInstance = listener;
             this.method = method;
         }

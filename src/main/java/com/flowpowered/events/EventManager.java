@@ -54,14 +54,14 @@ public interface EventManager {
      *
      * @param listener Listener to unregister
      */
-    public void unRegisterEvents(Listener listener);
+    public void unRegisterEventsByListener(Object listener);
 
     /**
      * Unregisters all the events in the given listener class
      *
      * @param owner the Owner to register all events from
      */
-    public void unRegisterEvents(Object owner);
+    public void unRegisterEventsByOwner(Object owner);
 
     /**
      * Registers all the events in the given listener class
@@ -69,7 +69,7 @@ public interface EventManager {
      * @param listener Listener to register
      * @param owner Owner to register the event for
      */
-    public void registerEvents(Listener listener, Object owner);
+    public void registerEvents(Object listener, Object owner);
 
     /**
      * Registers the specified executor to the given event class
